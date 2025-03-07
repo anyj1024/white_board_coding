@@ -28,7 +28,7 @@ public class BankTransferByTryLock {
     static class BankAccount {
         private final int id;
         private int balance;
-        private static final Lock lock = new ReentrantLock();
+        private final Lock lock = new ReentrantLock();
 
         public BankAccount(int id, int balance) {
             this.id = id;
@@ -54,13 +54,13 @@ public class BankTransferByTryLock {
                                     destination.lock.unlock();
                                 }
                             }
-                            return;
                         } finally {
                             this.lock.unlock();
                         }
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    System.out.println("Transfer interrupted.");
                 }
             }
         }
